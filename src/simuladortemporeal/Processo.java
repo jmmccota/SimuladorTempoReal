@@ -11,7 +11,7 @@ import java.util.ArrayList;
  *
  * @author Windows
  */
-public class Processo implements Comparable<Processo>{
+public class Processo{// implements Comparable<Processo>{
     
     private int num,tempoExec,periodo,deadline,qualRodada=0,executado;
     ArrayList<Integer> periodos=new ArrayList<Integer>();
@@ -82,15 +82,15 @@ public class Processo implements Comparable<Processo>{
         deads.add(dd);
     }
 
-    @Override
-    public int compareTo(Processo o) {
-        if(this.periodo < o.getPeriodo()){
-            return -1;
-        } else if(this.periodo > o.getPeriodo()) {
-            return 1;
-        } else {
-            return 0;
-        }
-    }
+//    @Override
+//    public int compareTo(Processo o) {
+//        if(this.periodo < o.getPeriodo()){
+//            return -1;
+//        } else if(this.periodo > o.getPeriodo()) {
+//            return 1;
+//        } else {
+//            return 0;
+//        }
+//    }
     
 }

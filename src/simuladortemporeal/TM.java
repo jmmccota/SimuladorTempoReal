@@ -7,6 +7,7 @@ package simuladortemporeal;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 
 /**
  *
@@ -22,12 +23,25 @@ public class TM {
 
         list = lista;
         ordem = (ArrayList<Processo>) lista.clone();
-        Collections.sort(ordem);
+        Collections.sort(ordem, new Comparator<Processo>() {
+            @Override
+            public int compare(Processo o1, Processo o2) {
+                if (o1.getPeriodo() < o2.getPeriodo()) {
+                    return -1;
+                } else if (o1.getPeriodo() > o2.getPeriodo()) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            }
+        });
         //primeiraOrdem();
         tempoMaximo = 0;
         for (Processo p : list) {
             if (p.getPeriodo() > tempoMaximo) {
+
                 tempoMaximo = p.getPeriodo();
+
             }
         }
         for (Processo list1 : list) {
@@ -51,7 +65,6 @@ public class TM {
 //            }
 //        } // fim
 //    }
-
     private void executa() {
         ArrayList[] a = new ArrayList[list.size()];
 
@@ -62,7 +75,6 @@ public class TM {
         for (int tempo = 0; tempo < tempoMaximo; tempo++) {
             //
 
-            
             atualizaOrdem(tempo);
         }
 

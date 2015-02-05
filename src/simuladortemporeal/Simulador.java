@@ -18,7 +18,7 @@ import java.util.Iterator;
 public class Simulador {
     public void TaxaMonotonica(ArrayList<Processo> processos, long limiteTempo){
 	ArrayList<Processo> processosOrdenado = (ArrayList<Processo>) processos.clone();
-        Collections.sort(processosOrdenado);
+        //Collections.sort(processosOrdenado);
         for (Processo p : processosOrdenado){
             p.setDead(p.getTempo());
         }
