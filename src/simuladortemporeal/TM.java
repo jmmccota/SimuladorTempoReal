@@ -47,6 +47,9 @@ public class TM {
         for (Processo list1 : list) {
             list1.preenchePeriodos(tempoMaximo);
         }
+        for (int i = 0; i < ordem.size(); i++) {
+            ordem.get(i).setPrioridade(ordem.size()-i);
+        }
         executa();
 
     }

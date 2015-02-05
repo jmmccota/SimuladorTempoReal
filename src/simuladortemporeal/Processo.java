@@ -11,73 +11,84 @@ import java.util.ArrayList;
  *
  * @author Windows
  */
-public class Processo{// implements Comparable<Processo>{
-    
-    private int num,tempoExec,periodo,deadline,qualRodada=0,executado;
-    ArrayList<Integer> periodos=new ArrayList<Integer>();
-    ArrayList<Integer> deads=new ArrayList<Integer>();
+public class Processo {// implements Comparable<Processo>{
+
+    private int num, tempoExec, periodo, deadline, qualRodada = 0, executado, prioridade;
+    ArrayList<Integer> periodos = new ArrayList<Integer>();
+    ArrayList<Integer> deads = new ArrayList<Integer>();
 
     public Processo(int numero, int tempo, int peri, int dead) {
-        num=numero;
-        tempoExec=tempo;
-        periodo=peri;
-        deadline=dead;
-        executado=0;
+        num = numero;
+        tempoExec = tempo;
+        periodo = peri;
+        deadline = dead;
+        executado = 0;
     }
-    
-    public void setNum(int numero){
-        num=numero;
+
+    public void setNum(int numero) {
+        num = numero;
     }
-    public void setTempo(int numero){
-        tempoExec=numero;
+
+    public void setTempo(int numero) {
+        tempoExec = numero;
     }
-    public void setPeriodo(int numero){
-        periodo=numero;
+
+    public void setPeriodo(int numero) {
+        periodo = numero;
     }
-    public void setDead(int numero){
-        deadline=numero;
+
+    public void setDead(int numero) {
+        deadline = numero;
     }
-    public int getNum(){
+
+    public int getNum() {
         return num;
     }
-    public void setRodada(){
+
+    public void setRodada() {
         qualRodada++;
     }
-    public int getExe(){
+
+    public int getExe() {
         return executado;
     }
-    public void setExe(){
+
+    public void setExe() {
         executado++;
     }
-    public int getRodada(){
+
+    public int getRodada() {
         return qualRodada;
     }
-    public int getTempo(){
+
+    public int getTempo() {
         return tempoExec;
     }
-    public int getPeriodo(){
+
+    public int getPeriodo() {
         return periodo;
     }
-    public int getDead(){
+
+    public int getDead() {
         return deadline;
     }
 
     public void preenchePeriodos(int tempoMaximo) {
-        int tt=periodo;
-        while(tt<tempoMaximo){
+        int tt = periodo;
+        while (tt < tempoMaximo) {
             periodos.add(tt);
-            tt+=periodo;
+            tt += periodo;
         }
         periodos.add(tt);
         preencheDeads();
-        
+
     }
 
     public void preencheDeads() {
-        int dd=deadline;
-        for(int i=0;i<periodos.size();i++){
+        int dd = deadline;
+        for (int i = 0; i < periodos.size(); i++) {
             deads.add(dd);
-            dd+=periodo;
+            dd += periodo;
         }
         deads.add(dd);
     }
@@ -92,5 +103,12 @@ public class Processo{// implements Comparable<Processo>{
 //            return 0;
 //        }
 //    }
-    
+
+    public int getPrioridade() {
+        return prioridade;
+    }
+
+    public void setPrioridade(int prioridade) {
+        this.prioridade = prioridade;
+    }
 }
