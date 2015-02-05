@@ -6,16 +6,6 @@
 
 package simuladortemporeal2;
 
-import javax.swing.JOptionPane;
-
-/**
- * Relatório do escalonamento
-     Número de trocas de contexto
-     Número de trocas de contexto por preempção
-     Percentual de utilização da CPU
-     Tempo do primeiro escalonamento de cada processo
-     Indicar se foi possível realizar o escalonamento
- */
 public class Relatorio {
     
     private int trocas;
@@ -35,7 +25,7 @@ public class Relatorio {
         trocas=0;
     }   
     
-    public void ordenarVetoresTempoNome(){
+    public void sorProccessByTN(){ //tempo e nome
         for (int i = 0; i < tempoPrimeiro.length; i++) {
             for (int j = i+1; j < tempoPrimeiro.length; j++) {
                 if (nomePrimeiro[i]> nomePrimeiro[j]) {  
@@ -50,7 +40,7 @@ public class Relatorio {
         }
     }
         
-    public void Exibir(){
+    public void showResult(){
         String escalona="";          
         escalona=escalonou?" É escalonavel!! ":" Impossível escalonar!! ";
         String primeiros="";
@@ -66,18 +56,17 @@ public class Relatorio {
         System.out.println("\t Utilização CPU: "+utilizacao);
         System.out.println("\t Primeiro escalonamento: \n"+primeiros);
         
-        
     }
     
-    public void addTroca(){
+    public void addChange(){
         trocas++;
     }
     
-    public void addPreempcao(){
+    public void addPreemp(){
         preempcao++;
     }
     
-    public void addPrimeiro(int tempo,char nome){
+    public void addFirst(int tempo,char nome){
         tempoPrimeiro[cont]=tempo;
         nomePrimeiro[cont]=nome;
         cont++;
@@ -122,6 +111,4 @@ public class Relatorio {
     public void setEscalonou(boolean escalonou) {
         this.escalonou = escalonou;
     }
-    
-    
 }

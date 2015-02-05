@@ -5,10 +5,8 @@
  */
 package simuladortemporeal2;
 
-import static java.lang.Character.toLowerCase;
 import java.util.ArrayList;
 import java.util.Scanner;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -63,7 +61,7 @@ public class ProcessosPeriodicos {
          */
         escalonador = new Escalonador(opcao);
         //escalonador=new Escalonador('m');
-        escalonador.Escalonar(processos, tempo);
+        escalonador.calculateEscalonish(processos, tempo);
         //escalonador.Escalonar(processos,18);
     }
 
