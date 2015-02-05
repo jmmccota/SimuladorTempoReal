@@ -49,12 +49,12 @@ public class Relatorio {
             primeiros+="\t P"+nomePrimeiro[j]+"= "+tempoPrimeiro[j]+"\n";
                   
         }
-        System.out.println("\n\n\t\t Relatório ");
+        System.out.println("\n\n Relatório ");
         System.out.println("\t "+escalona);
-        System.out.println("\t Quantidade de trocas: "+trocas);
-        System.out.println("\t Quantidade de preempções: "+preempcao);
-        System.out.println("\t Utilização CPU: "+utilizacao);
-        System.out.println("\t Primeiro escalonamento: \n"+primeiros);
+        System.out.println(" Quantidade de trocas: "+trocas);
+        System.out.println(" Quantidade de preempções: "+preempcao);
+        System.out.println(" Utilização CPU: "+utilizacao);
+        System.out.println(" Primeiro escalonamento: \n"+primeiros);
         
     }
     

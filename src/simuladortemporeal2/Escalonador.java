@@ -118,7 +118,7 @@ public class Escalonador {
             System.out.println(" ");
             System.out.println("P" + pTodos.get(xx).getNome() + ": ");
             for (int jj = 0; jj < pTodos.get(xx).getImprimir().size(); jj++) {
-                System.out.print(pTodos.get(xx).getImprimir().get(jj));
+                System.out.print(pTodos.get(xx).getImprimir().get(jj)+" ");
             }
             
         }
