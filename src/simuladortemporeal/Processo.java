@@ -56,6 +56,9 @@ public class Processo {// implements Comparable<Processo>{
     public void setExe() {
         executado++;
     }
+    public void zeraExe() {
+        executado=0;
+    }
 
     public int getRodada() {
         return qualRodada;
@@ -67,6 +70,9 @@ public class Processo {// implements Comparable<Processo>{
 
     public int getPeriodo() {
         return periodo;
+    }
+    public ArrayList<Integer> getPeriodos() {
+        return periodos;
     }
 
     public int getDead() {

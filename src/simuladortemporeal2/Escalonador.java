@@ -16,14 +16,14 @@ import javax.swing.JOptionPane;
  */
 public class Escalonador {
 
-    char tipo;
+    int tipo;
     int tempo;
     boolean ordena = false;
     Relatorio relatorio;
     int preemp[] = new int[20];
     int contPreemp = 0;
 
-    public Escalonador(char t) {
+    public Escalonador(int t) {
         tipo = t;
         tempo = 0;
     }
@@ -38,8 +38,9 @@ public class Escalonador {
         for (Processo p : processos) {
             utilizacao += ((double) p.getCusto() / (double) p.getPeriodo());
             pTodos.add(new Processo(p.getCusto(), p.getPeriodo(), p.getNome(), p.getDeadLine()));
-            System.out.print(p.getNome() + "\t");
+            System.out.print("P"+p.getNome() + "\t");
         }
+        //System.out.print("Utilizacao :"+utilizacao);
         relatorio.setUtilizacao(utilizacao);
         /* for(int x=0;x<pTodos.length;x++){
          JOptionPane.showInputDialog("Todos"+processos[x].getNome());
@@ -77,7 +78,7 @@ public class Escalonador {
                     System.out.print("|\t");
                 }
             }
-            System.out.println(pAtual);
+            System.out.println("P"+pAtual);
 
             if (pAnterior != pAtual && pAtual != '-') {
                 relatorio.addTroca();
@@ -107,9 +108,9 @@ public class Escalonador {
         processos = VerificaTempo(processos);
         processos = VerificaPeriodo(processos);
         addProcessosNaoTerminadosRelatorio(processos);
-        for (int l = 0; l < contPreemp; l++) {
+        /*for (int l = 0; l < contPreemp; l++) {
             System.out.print(preemp[l] + "-");
-        }
+        }*/
         relatorio.Exibir();
 
     }
@@ -159,11 +160,11 @@ public class Escalonador {
 
     public ArrayList<Processo> VerificaPeriodo(ArrayList<Processo> processos) {
         for (Processo p : processos) {
-            if ((tempo - p.getDeadLine()) % p.getPeriodo() == 0 && tipo == 'd') {
+            if ((tempo - p.getDeadLine()) % p.getPeriodo() == 0 && tipo == 3) {
                 if (!p.isAcabou()) {
                     if (tempo != 0) {
                         relatorio.setEscalonou(false);
-                        System.out.println("NAO FOI POSSIVEL ESCALONAR " + p.getNome() + " Tempo:" + tempo);
+                        System.out.println("ERRO!!! IMPOSSÍVEL ESCALONAR P" + p.getNome() + ". Tempo:" + tempo);
                     }
                 }
             }
@@ -172,7 +173,7 @@ public class Escalonador {
                 if (!p.isAcabou()) {
                     if (tempo != 0) {
                         relatorio.setEscalonou(false);
-                        System.out.println("NAO FOI POSSIVEL ESCALONAR " + p.getNome() + " Tempo:" + tempo);
+                        System.out.println("ERRO!!! IMPOSSÍVEL ESCALONAR P" + p.getNome() + " Tempo:" + tempo);
                     }
                 }
                 ordena = true;
@@ -184,7 +185,7 @@ public class Escalonador {
     }
 
     public ArrayList<Processo> Ordenar(ArrayList<Processo> p) {
-        if (tipo == 'm') {
+        if (tipo ==1) {
             Collections.sort(p, new Comparator<Processo>() {
                 @Override
                 public int compare(Processo o1, Processo o2) {
@@ -207,7 +208,7 @@ public class Escalonador {
 //                }
 //            }
 
-        } else if (tipo == 'e') {
+        } else if (tipo ==2) {
             Collections.sort(p, new Comparator<Processo>() {
                 @Override
                 public int compare(Processo o1, Processo o2) {
@@ -230,7 +231,7 @@ public class Escalonador {
 //                }
 //            }
 
-        } else if (tipo == 'd') {
+        } else if (tipo ==3) {
 
             Collections.sort(p, new Comparator<Processo>() {
                 @Override

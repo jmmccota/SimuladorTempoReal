@@ -52,22 +52,21 @@ public class Relatorio {
         
     public void Exibir(){
         String escalona="";          
-        escalona=escalonou?"E escalonavel":"Nao e escalonavel";
+        escalona=escalonou?" É escalonavel!! ":" Impossível escalonar!! ";
         String primeiros="";
         
         for (int j=0; j < tempoPrimeiro.length; j++) {
-            primeiros+="| "+nomePrimeiro[j]+"="+tempoPrimeiro[j]+"\n";
+            primeiros+="\t P"+nomePrimeiro[j]+"= "+tempoPrimeiro[j]+"\n";
                   
         }
+        System.out.println("\n\n\t\t Relatório ");
+        System.out.println("\t "+escalona);
+        System.out.println("\t Quantidade de trocas: "+trocas);
+        System.out.println("\t Quantidade de preempções: "+preempcao);
+        System.out.println("\t Utilização CPU: "+utilizacao);
+        System.out.println("\t Primeiro escalonamento: \n"+primeiros);
         
-        JOptionPane.showMessageDialog(null,
-                  "__________RELATORIO__________\n"
-                + "| "+escalona+"\n"
-                + "| Qtd. de trocas: "+trocas+"\n"
-                + "| Qtd. de preempcoes: "+preempcao+"\n"
-                + "| Utilizacao da CPU: "+utilizacao*100+"%\n"
-                + "| Primeiro Escalonamento:\n"
-                + primeiros);   
+        
     }
     
     public void addTroca(){
