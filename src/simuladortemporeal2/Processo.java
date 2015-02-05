@@ -5,12 +5,12 @@ package simuladortemporeal2;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author Sammy
  */
 public class Processo {
+
     private int custo;
     private int deadLine;
     private int periodo;
@@ -19,58 +19,70 @@ public class Processo {
     private boolean acabou;
     private boolean fezPrimeiro;
 
-   /* public Processo(int c,int p,String n){
-        custo=c;
-        periodo=p;
-        contTempo=0;
-    }*/
-    public Processo(int c,int p,char n,int d){
-        custo=c;
-        periodo=p;
-        nome=n;
-        deadLine=d;
-        contTempo=0;
-        acabou=false;
-        fezPrimeiro=false;
+    public Processo(int custo, int periodo, char nome, int deadLine) {
+        this.custo = custo;
+        this.deadLine = deadLine;
+        this.periodo = periodo;
+        this.nome = nome;
+        contTempo = 0;
+        acabou = false;
+        fezPrimeiro = false;
     }
 
-    public boolean IsFezPrimeiro() {
+    public int getCusto() {
+        return custo;
+    }
+
+    public void setCusto(int custo) {
+        this.custo = custo;
+    }
+
+    public int getDeadLine() {
+        return deadLine;
+    }
+
+    public void setDeadLine(int deadLine) {
+        this.deadLine = deadLine;
+    }
+
+    public int getPeriodo() {
+        return periodo;
+    }
+
+    public void setPeriodo(int periodo) {
+        this.periodo = periodo;
+    }
+
+    public int getContTempo() {
+        return contTempo;
+    }
+
+    public void setContTempo(int contTempo) {
+        this.contTempo = contTempo;
+    }
+
+    public char getNome() {
+        return nome;
+    }
+
+    public void setNome(char nome) {
+        this.nome = nome;
+    }
+
+    public boolean isAcabou() {
+        return acabou;
+    }
+
+    public void setAcabou(boolean acabou) {
+        this.acabou = acabou;
+    }
+
+    public boolean isFezPrimeiro() {
         return fezPrimeiro;
     }
 
-    public void FezPrimeiro() {
-        this.fezPrimeiro = true;
+    public void setFezPrimeiro(boolean fezPrimeiro) {
+        this.fezPrimeiro = fezPrimeiro;
     }
-    
-    public void Acabou(){
-        acabou=true;
-    }
-    public void Recomecou(){
-        acabou=false;
-    }
-    public void IncrementaTempo(){
-        contTempo++;
-    }
-    public void ZeraTempo(){
-        contTempo=0;
-    }
-    public int getCusto(){
-        return custo;
-    }
-    public int getPeriodo(){
-        return periodo;
-    }
-    public int getDeadLine(){
-        return deadLine;
-    }
-    public int getTempo(){
-        return contTempo;
-    }
-    public char getNome(){
-        return nome;
-    }
-    public boolean getAcabou(){
-        //if(custo==contTempo)acabou=true;
-        return acabou;
-    }
+
 }

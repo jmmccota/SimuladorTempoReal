@@ -25,18 +25,18 @@ public class ProcessosPeriodicos {
         Escalonador escalonador;
         int custo,periodo,deadLine;
         char nome;
-        Processo[] processos;
+        ArrayList<Processo> processos;
         
         int qtd=0;
         qtd=Integer.parseInt(JOptionPane.showInputDialog("Informe a Quantidade de processos"));
-        processos= new Processo[qtd];
+        processos = new ArrayList<>();
         for(int x=0;x<qtd;x++){
             String nomeString=JOptionPane.showInputDialog("Informe o nome do processo");
             nome=nomeString.toCharArray()[0];
             custo=Integer.parseInt(JOptionPane.showInputDialog("Informe o Custo de CPU de "+nome));
             periodo=Integer.parseInt(JOptionPane.showInputDialog("Informe o Periodo de "+nome));
             deadLine=Integer.parseInt(JOptionPane.showInputDialog("Informe o DeadLine de "+nome));
-            processos[x]=new Processo(custo,periodo,nome,deadLine);
+            processos.add(new Processo(custo,periodo,nome,deadLine));
             
         }
         String tipoEscal=JOptionPane.showInputDialog("Informe o tipo de Escalonamento(Monotonica/EDF/DeadLine Monotonico)");

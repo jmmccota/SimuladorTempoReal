@@ -3,10 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package simuladortemporeal2;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import javax.swing.JOptionPane;
 
 /**
@@ -14,230 +15,247 @@ import javax.swing.JOptionPane;
  * @author Sammy
  */
 public class Escalonador {
+
     char tipo;
     int tempo;
-    boolean ordena=false;
+    boolean ordena = false;
     Relatorio relatorio;
-    int preemp[]=new int[20];
-    int contPreemp=0;
-    
-    public Escalonador(char t){
-        tipo=t;
-        tempo=0;
+    int preemp[] = new int[20];
+    int contPreemp = 0;
+
+    public Escalonador(char t) {
+        tipo = t;
+        tempo = 0;
     }
-    
-    public void Escalonar(Processo[] processos,int time){
-        relatorio=new Relatorio(processos.length);
-        char pAnterior=' ';
-        double utilizacao=0;
-        
-        Processo[] pTodos=new Processo[processos.length];
+
+    public void Escalonar(ArrayList<Processo> processos, int time) {
+        relatorio = new Relatorio(processos.size());
+        char pAnterior = ' ';
+        double utilizacao = 0;
+
+        ArrayList<Processo> pTodos = new ArrayList<Processo>();
         System.out.print("Tempo\t");
-        for (int x=0;x< pTodos.length;x++){
-            utilizacao+=((double)processos[x].getCusto()/(double)processos[x].getPeriodo());
-            pTodos[x]=new Processo(processos[x].getCusto(),processos[x].getPeriodo(),processos[x].getNome(),processos[x].getDeadLine());
-            System.out.print(pTodos[x].getNome()+"\t");
+        for (Processo p : processos) {
+            utilizacao += ((double) p.getCusto() / (double) p.getPeriodo());
+            pTodos.add(new Processo(p.getCusto(), p.getPeriodo(), p.getNome(), p.getDeadLine()));
+            System.out.print(p.getNome() + "\t");
         }
         relatorio.setUtilizacao(utilizacao);
-       /* for(int x=0;x<pTodos.length;x++){
-                JOptionPane.showInputDialog("Todos"+processos[x].getNome());
-            }*/
+        /* for(int x=0;x<pTodos.length;x++){
+         JOptionPane.showInputDialog("Todos"+processos[x].getNome());
+         }*/
         System.out.println("Em Execução");
-        processos=Ordenar(processos);
-        do{            
-            ordena=false;
-            processos=VerificaTempo(processos);
-            
-            processos=VerificaPeriodo(processos);     
-            
-           /*for(int x=0;x<processos.length;x++){
-                JOptionPane.showInputDialog("Processos"+processos[x].getNome()+"/"+processos[x].getTempo()+"/"+processos[x].getAcabou());
-            }/*
-            for(int x=0;x<pTodos.length;x++){
-                JOptionPane.showInputDialog("Todos"+processos[x].getNome());
-            }*/
-                       
-            if(ordena)processos=Ordenar(processos);
-            
-            char pAtual=NomePrimeiroProcessoNaoTerminado(processos);
-            
-            if(tempo==0){
-                pAnterior=pAtual;
+        processos = Ordenar(processos);
+        do {
+            ordena = false;
+            processos = VerificaTempo(processos);
+
+            processos = VerificaPeriodo(processos);
+
+            /*for(int x=0;x<processos.length;x++){
+             JOptionPane.showInputDialog("Processos"+processos[x].getNome()+"/"+processos[x].getTempo()+"/"+processos[x].getAcabou());
+             }/*
+             for(int x=0;x<pTodos.length;x++){
+             JOptionPane.showInputDialog("Todos"+processos[x].getNome());
+             }*/
+            if (ordena) {
+                processos = Ordenar(processos);
             }
-            
-            System.out.print(tempo+"-"+(tempo+1)+"\t");
-             
-            for (int x=0;x<pTodos.length;x++){
-                if(pTodos[x].getNome()==pAtual){
+
+            char pAtual = NomePrimeiroProcessoNaoTerminado(processos);
+
+            if (tempo == 0) {
+                pAnterior = pAtual;
+            }
+
+            System.out.print(tempo + "-" + (tempo + 1) + "\t");
+
+            for (Processo pTodo : pTodos) {
+                if (pTodo.getNome() == pAtual) {
                     System.out.print("#\t");
-                }else{System.out.print("|\t");}
-                
+                } else {
+                    System.out.print("|\t");
+                }
             }
             System.out.println(pAtual);
-            
-            if(pAnterior!=pAtual && pAtual!='-'){
+
+            if (pAnterior != pAtual && pAtual != '-') {
                 relatorio.addTroca();
             }
-            
-            for(int x=0;x<processos.length;x++){
+
+            for (Processo processo : processos) {
                 //JOptionPane.showInputDialog(processos[x].getNome()+"/"+processos[x].getTempo()+"/"+processos[x].getAcabou());
-                if(processos[x].getNome()==pAtual){
-                    processos[x].IncrementaTempo();  
+                if (processo.getNome() == pAtual) {
+                    processo.setContTempo(1 + processo.getContTempo());
                 }
             }
-            
-           
-            
-            for(int x=0;x<processos.length;x++){
-               
-                if(processos[x].getNome()==pAnterior && processos[x].getNome()!=pAtual && !processos[x].getAcabou() && processos[x].getTempo()!=0){
+
+            for (Processo processo : processos) {
+                if (processo.getNome() == pAnterior && processo.getNome() != pAtual && !processo.isAcabou() && processo.getContTempo() != 0) {
                     relatorio.addPreempcao();
-                    preemp[contPreemp]=tempo;contPreemp++;
+                    preemp[contPreemp] = tempo;
+                    contPreemp++;
                 }
             }
-            
-            pAnterior=pAtual;
-        
+
+            pAnterior = pAtual;
+
             tempo++;
-        
-        }while(tempo<time);
-        
-        processos=VerificaTempo(processos);
-        processos=VerificaPeriodo(processos);     
+
+        } while (tempo < time);
+
+        processos = VerificaTempo(processos);
+        processos = VerificaPeriodo(processos);
         addProcessosNaoTerminadosRelatorio(processos);
-        for(int l=0;l<contPreemp;l++){System.out.print(preemp[l]+"-");}
+        for (int l = 0; l < contPreemp; l++) {
+            System.out.print(preemp[l] + "-");
+        }
         relatorio.Exibir();
-        
+
     }
-    public void addProcessosNaoTerminadosRelatorio(Processo[] processos){
-        for (int x=0;x<processos.length;x++){
-            
-            if(!processos[x].IsFezPrimeiro()){
-                relatorio.addPrimeiro(0,processos[x].getNome());
+
+    public void addProcessosNaoTerminadosRelatorio(ArrayList<Processo> processos) {
+        for (Processo p : processos) {
+            if (!p.isFezPrimeiro()) {
+                relatorio.addPrimeiro(0, p.getNome());
             }
-            
-            ordena=true;               
-                     
+            ordena = true;
         }
     }
-    public char NomePrimeiroProcessoNaoTerminado(Processo[] p){
-        for (int x=0;x< p.length;x++) {
-            if(!p[x].getAcabou()){
-                return p[x].getNome();
+
+    public char NomePrimeiroProcessoNaoTerminado(ArrayList<Processo> p) {
+        for (Processo p1 : p) {
+            if (!p1.isAcabou()) {
+                return p1.getNome();
             }
         }
         return '-';
     }
-    public boolean Terminou(Processo[] p){
-        for (int x=0;x< p.length;x++) {
-            if(p[x].getTempo()!=0)return false;
+
+    public boolean Terminou(ArrayList<Processo> processos) {
+        for (Processo p : processos) {
+            if (p.getContTempo() != 0) {
+                return false;
+            }
         }
         return true;
     }
-    public Processo[] VerificaTempo(Processo[] processos){
-        
-        for (int x=0;x<processos.length;x++){
-            if(processos[x].getTempo()==processos[x].getCusto()){
-                processos[x].ZeraTempo();
-                processos[x].Acabou();
-                if(!processos[x].IsFezPrimeiro()){
-                    processos[x].FezPrimeiro();
-                    relatorio.addPrimeiro(tempo,processos[x].getNome());
+
+    public ArrayList<Processo> VerificaTempo(ArrayList<Processo> processos) {
+
+        for (Processo p : processos) {
+            if (p.getContTempo() == p.getCusto()) {
+                p.setContTempo(0);
+                p.setAcabou(true);
+                if (!p.isFezPrimeiro()) {
+                    p.setFezPrimeiro(true);
+                    relatorio.addPrimeiro(tempo, p.getNome());
                 }
-                
-                ordena=true;               
-            }            
-        }
-        return processos;
-    }
-    public Processo[] VerificaPeriodo(Processo[] processos){
-        for (int x=0;x<processos.length;x++){
-            
-            if((tempo-processos[x].getDeadLine())%processos[x].getPeriodo()==0 && tipo=='d'){
-                if(!processos[x].getAcabou()){
-                    if(tempo!=0){
-                        relatorio.setEscalonou(false);
-                        JOptionPane.showMessageDialog(null,"NAO FOI POSSIVEL ESCALONAR "+processos[x].getNome()+" Tempo:"+tempo);
-                    }
-                }
-            }
-            
-            if(tempo%processos[x].getPeriodo()==0){
-                if(!processos[x].getAcabou()){
-                    if(tempo!=0){
-                        relatorio.setEscalonou(false);
-                        JOptionPane.showMessageDialog(null,"NAO FOI POSSIVEL ESCALONAR "+processos[x].getNome()+" Tempo:"+tempo);
-                    }
-                }
-                ordena=true;
-                processos[x].ZeraTempo();
-                processos[x].Recomecou();
+                ordena = true;
             }
         }
         return processos;
     }
-    public Processo[] Ordenar(Processo[] p){
-        if(tipo=='m'){
-            
-            for (int i = 0; i < p.length; i++) {
-                for (int j = i+1; j < p.length; j++) {
-                    if (p[i].getPeriodo() > p[j].getPeriodo()) {  
-                        Processo aux = p[i]; 
-                        p[i] = p[j]; 
-                        p[j] = aux; 
-                    } 
-                } 
-            }/*
-            for (int i = 0; i < p.length; i++) {
-                for (int j = 0; j < p.length; j++) { 
-                    if (p[i].getPeriodo() < p[j].getPeriodo()) {  
-                        Processo aux = p[i]; 
-                        p[i] = p[j]; 
-                        p[j] = aux; 
-                    } 
-                } 
-            }*/
-        }else if(tipo=='e'){
-            for (int i = 0; i < p.length; i++) {
-                for (int j = i+1; j < p.length; j++) {
-                    if (((tempo/p[i].getPeriodo())+1)*p[i].getPeriodo() > ((tempo/p[j].getPeriodo())+1)*p[j].getPeriodo()) {  
-                        Processo aux = p[i]; 
-                        p[i] = p[j]; 
-                        p[j] = aux; 
-                    } 
-                } 
+
+    public ArrayList<Processo> VerificaPeriodo(ArrayList<Processo> processos) {
+        for (Processo p : processos) {
+            if ((tempo - p.getDeadLine()) % p.getPeriodo() == 0 && tipo == 'd') {
+                if (!p.isAcabou()) {
+                    if (tempo != 0) {
+                        relatorio.setEscalonou(false);
+                        System.out.println("NAO FOI POSSIVEL ESCALONAR " + p.getNome() + " Tempo:" + tempo);
+                    }
+                }
             }
-            /*for (int i = 0; i < p.length; i++) {
-                for (int j = 0; j < p.length; j++) { 
-                    if (p[i].getPeriodo()-p[i].getTempo() < p[j].getPeriodo()-p[j].getTempo()) {  
-                        Processo aux = p[i]; 
-                        p[i] = p[j]; 
-                        p[j] = aux; 
-                    } 
-                } 
-            }*/
-        }else if(tipo=='d'){
-             for (int i = 0; i < p.length; i++) {
-                for (int j = i+1; j < p.length; j++) {
-                    if (p[i].getDeadLine() > p[j].getDeadLine()) {  
-                        Processo aux = p[i]; 
-                        p[i] = p[j]; 
-                        p[j] = aux; 
-                    } 
-                } 
+
+            if (tempo % p.getPeriodo() == 0) {
+                if (!p.isAcabou()) {
+                    if (tempo != 0) {
+                        relatorio.setEscalonou(false);
+                        System.out.println("NAO FOI POSSIVEL ESCALONAR " + p.getNome() + " Tempo:" + tempo);
+                    }
+                }
+                ordena = true;
+                p.setContTempo(0);
+                p.setAcabou(false);
             }
-             /*
-            for (int i = 0; i < p.length; i++) {
-                for (int j = 0; j < p.length; j++) { 
-                    if (p[i].getDeadLine() < p[j].getDeadLine()) {  
-                        Processo aux = p[i]; 
-                        p[i] = p[j]; 
-                        p[j] = aux; 
-                    } 
-                } 
-            }*/
+        }
+        return processos;
+    }
+
+    public ArrayList<Processo> Ordenar(ArrayList<Processo> p) {
+        if (tipo == 'm') {
+            Collections.sort(p, new Comparator<Processo>() {
+                @Override
+                public int compare(Processo o1, Processo o2) {
+                    if (o1.getPeriodo() < o2.getPeriodo()) {
+                        return -1;
+                    } else if (o1.getPeriodo() > o2.getPeriodo()) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                }
+            });
+//            for (int i = 0; i < p.size(); i++) {
+//                for (int j = i + 1; j < p.size(); j++) {
+//                    if (p.get(i).getPeriodo() > p.get(j).getPeriodo()) {
+//                        Processo aux = p.get(i);
+//                        p.get(i) = p.get(j);
+//                        p.get(j) = aux;
+//                    }
+//                }
+//            }
+
+        } else if (tipo == 'e') {
+            Collections.sort(p, new Comparator<Processo>() {
+                @Override
+                public int compare(Processo o1, Processo o2) {
+                    if (((tempo / o1.getPeriodo()) + 1) * o1.getPeriodo() < ((tempo / o2.getPeriodo()) + 1) * o2.getPeriodo()) {
+                        return -1;
+                    } else if (((tempo / o1.getPeriodo()) + 1) * o1.getPeriodo() > ((tempo / o2.getPeriodo()) + 1) * o2.getPeriodo()) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                }
+            });
+//            for (int i = 0; i < p.size(); i++) {
+//                for (int j = i + 1; j < p.size(); j++) {
+//                    if (((tempo / p.get(i).getPeriodo()) + 1) * p.get(i).getPeriodo() > ((tempo / p.get(j).getPeriodo()) + 1) * p.get(j).getPeriodo()) {
+//                        Processo aux = p.get(i);
+//                        p.get(i) = p.get(j);
+//                        p.get(j) = aux;
+//                    }
+//                }
+//            }
+
+        } else if (tipo == 'd') {
+
+            Collections.sort(p, new Comparator<Processo>() {
+                @Override
+                public int compare(Processo o1, Processo o2) {
+                    if (o1.getDeadLine() < o2.getDeadLine()) {
+                        return -1;
+                    } else if (o1.getDeadLine() > o2.getDeadLine()) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                }
+            });
+//            for (int i = 0; i < p.size(); i++) {
+//                for (int j = i + 1; j < p.size(); j++) {
+//                    if (p.get(i).getDeadLine() > p.get(j).getDeadLine()) {
+//                        Processo aux = p.get(i);
+//                        p.get(i) = p.get(j);
+//                        p.get(j) = aux;
+//                    }
+//                }
+//            }
+
         }
         return p;
     }
-    
+
 }
