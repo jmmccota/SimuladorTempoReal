@@ -1,5 +1,7 @@
 package simuladortemporeal2;
 
+import java.util.ArrayList;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -18,6 +20,7 @@ public class Processo {
     private char nome;
     private boolean acabou;
     private boolean fezPrimeiro;
+    private ArrayList<String> imprimir;
 
     public Processo(int custo, int periodo, char nome, int deadLine) {
         this.custo = custo;
@@ -27,8 +30,14 @@ public class Processo {
         contTempo = 0;
         acabou = false;
         fezPrimeiro = false;
+        imprimir = new ArrayList<String>();
     }
-
+    public ArrayList<String> getImprimir(){
+        return imprimir;
+    }
+    public void setImprimir(String s){
+        imprimir.add(s);
+    }
     public int getCusto() {
         return custo;
     }

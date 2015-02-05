@@ -38,7 +38,7 @@ public class Escalonador {
         for (Processo p : processos) {
             utilizacao += ((double) p.getCusto() / (double) p.getPeriodo());
             pTodos.add(new Processo(p.getCusto(), p.getPeriodo(), p.getNome(), p.getDeadLine()));
-            System.out.print("P"+p.getNome() + "\t");
+            System.out.print("P" + p.getNome() + "\t");
         }
         //System.out.print("Utilizacao :"+utilizacao);
         relatorio.setUtilizacao(utilizacao);
@@ -74,11 +74,13 @@ public class Escalonador {
             for (Processo pTodo : pTodos) {
                 if (pTodo.getNome() == pAtual) {
                     System.out.print("0\t");
+                    pTodo.setImprimir("*");
                 } else {
                     System.out.print("|\t");
+                    pTodo.setImprimir("-");
                 }
             }
-            System.out.println("P"+pAtual);
+            System.out.println("P" + pAtual);
 
             if (pAnterior != pAtual && pAtual != '-') {
                 relatorio.addChange();
@@ -109,8 +111,17 @@ public class Escalonador {
         processos = periodVerification(processos);
         addNotEndedProccess(processos);
         /*for (int l = 0; l < contPreemp; l++) {
-            System.out.print(preemp[l] + "-");
-        }*/
+         System.out.print(preemp[l] + "-");
+         }*/
+        for (int xx = 0; xx < processos.size(); xx++) {
+            //linha120
+            System.out.println(" ");
+            System.out.println("P" + pTodos.get(xx).getNome() + ": ");
+            for (int jj = 0; jj < pTodos.get(xx).getImprimir().size(); jj++) {
+                System.out.print(pTodos.get(xx).getImprimir().get(jj));
+            }
+            
+        }
         relatorio.showResult();
 
     }
@@ -185,7 +196,7 @@ public class Escalonador {
     }
 
     public ArrayList<Processo> sortner(ArrayList<Processo> p) {
-        if (tipo ==1) {
+        if (tipo == 1) {
             Collections.sort(p, new Comparator<Processo>() {
                 @Override
                 public int compare(Processo o1, Processo o2) {
@@ -208,7 +219,7 @@ public class Escalonador {
 //                }
 //            }
 
-        } else if (tipo ==2) {
+        } else if (tipo == 2) {
             Collections.sort(p, new Comparator<Processo>() {
                 @Override
                 public int compare(Processo o1, Processo o2) {
@@ -231,7 +242,7 @@ public class Escalonador {
 //                }
 //            }
 
-        } else if (tipo ==3) {
+        } else if (tipo == 3) {
 
             Collections.sort(p, new Comparator<Processo>() {
                 @Override
