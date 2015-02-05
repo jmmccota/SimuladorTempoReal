@@ -33,7 +33,7 @@ public class Escalonador {
         char pAnterior = ' ';
         double utilizacao = 0;
 
-        ArrayList<Processo> pTodos = new ArrayList<Processo>();
+        ArrayList<Processo> pTodos = new ArrayList<>();
         System.out.print("Tempo\t");
         for (Processo p : processos) {
             utilizacao += ((double) p.getCusto() / (double) p.getPeriodo());
@@ -71,7 +71,7 @@ public class Escalonador {
 
             System.out.print(tempo + "-" + (tempo + 1) + "\t");
 
-            for (Processo pTodo : pTodos) {
+            pTodos.stream().forEach((pTodo) -> {
                 if (pTodo.getNome() == pAtual) {
                     System.out.print("0\t");
                     pTodo.setImprimir("*");
@@ -79,7 +79,7 @@ public class Escalonador {
                     System.out.print("|\t");
                     pTodo.setImprimir("-");
                 }
-            }
+            });
             System.out.println("P" + pAtual);
 
             if (pAnterior != pAtual && pAtual != '-') {
@@ -127,12 +127,14 @@ public class Escalonador {
     }
 
     public void addNotEndedProccess(ArrayList<Processo> processos) {
-        for (Processo p : processos) {
+        processos.stream().map((p) -> {
             if (!p.isFezPrimeiro()) {
                 relatorio.addFirst(0, p.getNome());
             }
+            return p;
+        }).forEach((_item) -> {
             ordena = true;
-        }
+        });
     }
 
     public char proccessNotEndedName(ArrayList<Processo> p) {
@@ -145,32 +147,34 @@ public class Escalonador {
     }
 
     public boolean isEnded(ArrayList<Processo> processos) {
-        for (Processo p : processos) {
-            if (p.getContTempo() != 0) {
-                return false;
-            }
+        if (!processos.stream().noneMatch((p) -> (p.getContTempo() != 0))) {
+            return false;
         }
         return true;
     }
 
     public ArrayList<Processo> timeVerification(ArrayList<Processo> processos) {
 
-        for (Processo p : processos) {
-            if (p.getContTempo() == p.getCusto()) {
-                p.setContTempo(0);
-                p.setAcabou(true);
-                if (!p.isFezPrimeiro()) {
-                    p.setFezPrimeiro(true);
-                    relatorio.addFirst(tempo, p.getNome());
-                }
-                ordena = true;
+        processos.stream().filter((p) -> (p.getContTempo() == p.getCusto())).map((p) -> {
+            p.setContTempo(0);
+            return p;
+        }).map((p) -> {
+            p.setAcabou(true);
+            return p;
+        }).map((p) -> {
+            if (!p.isFezPrimeiro()) {
+                p.setFezPrimeiro(true);
+                relatorio.addFirst(tempo, p.getNome());
             }
-        }
+            return p;
+        }).forEach((_item) -> {
+            ordena = true;
+        });
         return processos;
     }
 
     public ArrayList<Processo> periodVerification(ArrayList<Processo> processos) {
-        for (Processo p : processos) {
+        processos.stream().map((p) -> {
             if ((tempo - p.getDeadLine()) % p.getPeriodo() == 0 && tipo == 3) {
                 if (!p.isAcabou()) {
                     if (tempo != 0) {
@@ -179,34 +183,36 @@ public class Escalonador {
                     }
                 }
             }
-
-            if (tempo % p.getPeriodo() == 0) {
-                if (!p.isAcabou()) {
-                    if (tempo != 0) {
-                        relatorio.setEscalonou(false);
-                        System.out.println("ERRO!!! IMPOSSÍVEL ESCALONAR P" + p.getNome() + " Tempo:" + tempo);
-                    }
+            return p;
+        }).filter((p) -> (tempo % p.getPeriodo() == 0)).map((p) -> {
+            if (!p.isAcabou()) {
+                if (tempo != 0) {
+                    relatorio.setEscalonou(false);
+                    System.out.println("ERRO!!! IMPOSSÍVEL ESCALONAR P" + p.getNome() + " Tempo:" + tempo);
                 }
-                ordena = true;
-                p.setContTempo(0);
-                p.setAcabou(false);
             }
-        }
+            return p;
+        }).map((p) -> {
+            ordena = true;
+            return p;
+        }).map((p) -> {
+            p.setContTempo(0);
+            return p;
+        }).forEach((p) -> {
+            p.setAcabou(false);
+        });
         return processos;
     }
 
     public ArrayList<Processo> sortner(ArrayList<Processo> p) {
         if (tipo == 1) {
-            Collections.sort(p, new Comparator<Processo>() {
-                @Override
-                public int compare(Processo o1, Processo o2) {
-                    if (o1.getPeriodo() < o2.getPeriodo()) {
-                        return -1;
-                    } else if (o1.getPeriodo() > o2.getPeriodo()) {
-                        return 1;
-                    } else {
-                        return 0;
-                    }
+            Collections.sort(p, (Processo o1, Processo o2) -> {
+                if (o1.getPeriodo() < o2.getPeriodo()) {
+                    return -1;
+                } else if (o1.getPeriodo() > o2.getPeriodo()) {
+                    return 1;
+                } else {
+                    return 0;
                 }
             });
 //            for (int i = 0; i < p.size(); i++) {
@@ -220,16 +226,13 @@ public class Escalonador {
 //            }
 
         } else if (tipo == 2) {
-            Collections.sort(p, new Comparator<Processo>() {
-                @Override
-                public int compare(Processo o1, Processo o2) {
-                    if (((tempo / o1.getPeriodo()) + 1) * o1.getPeriodo() < ((tempo / o2.getPeriodo()) + 1) * o2.getPeriodo()) {
-                        return -1;
-                    } else if (((tempo / o1.getPeriodo()) + 1) * o1.getPeriodo() > ((tempo / o2.getPeriodo()) + 1) * o2.getPeriodo()) {
-                        return 1;
-                    } else {
-                        return 0;
-                    }
+            Collections.sort(p, (Processo o1, Processo o2) -> {
+                if (((tempo / o1.getPeriodo()) + 1) * o1.getPeriodo() < ((tempo / o2.getPeriodo()) + 1) * o2.getPeriodo()) {
+                    return -1;
+                } else if (((tempo / o1.getPeriodo()) + 1) * o1.getPeriodo() > ((tempo / o2.getPeriodo()) + 1) * o2.getPeriodo()) {
+                    return 1;
+                } else {
+                    return 0;
                 }
             });
 //            for (int i = 0; i < p.size(); i++) {
@@ -244,16 +247,13 @@ public class Escalonador {
 
         } else if (tipo == 3) {
 
-            Collections.sort(p, new Comparator<Processo>() {
-                @Override
-                public int compare(Processo o1, Processo o2) {
-                    if (o1.getDeadLine() < o2.getDeadLine()) {
-                        return -1;
-                    } else if (o1.getDeadLine() > o2.getDeadLine()) {
-                        return 1;
-                    } else {
-                        return 0;
-                    }
+            Collections.sort(p, (Processo o1, Processo o2) -> {
+                if (o1.getDeadLine() < o2.getDeadLine()) {
+                    return -1;
+                } else if (o1.getDeadLine() > o2.getDeadLine()) {
+                    return 1;
+                } else {
+                    return 0;
                 }
             });
 //            for (int i = 0; i < p.size(); i++) {
