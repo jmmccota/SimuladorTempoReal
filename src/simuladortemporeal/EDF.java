@@ -15,7 +15,7 @@ public class EDF {
 
     ArrayList<Processo> list;
 
-    EDF(ArrayList<Processo> lista) {
+    public EDF(ArrayList<Processo> lista) {
         list=lista;
     }
 

@@ -15,7 +15,7 @@ public class DM {
 
     ArrayList<Processo> list;
 
-    DM(ArrayList<Processo> lista) {
+    public DM(ArrayList<Processo> lista) {
         list=lista;
     }
     

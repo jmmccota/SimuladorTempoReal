@@ -6,6 +6,7 @@
 package simuladortemporeal;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  *
@@ -17,38 +18,39 @@ public class TM {
     ArrayList<Processo> ordem;
     int tempoMaximo;
 
-    TM(ArrayList<Processo> lista) {
+    public TM(ArrayList<Processo> lista) {
 
         list = lista;
-        ordem = lista;
-        primeiraOrdem();
+        ordem = (ArrayList<Processo>) lista.clone();
+        Collections.sort(ordem);
+        //primeiraOrdem();
         tempoMaximo = 0;
-        for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).getPeriodo() > tempoMaximo) {
-                tempoMaximo = list.get(i).getPeriodo();
+        for (Processo p : list) {
+            if (p.getPeriodo() > tempoMaximo) {
+                tempoMaximo = p.getPeriodo();
             }
         }
-        for (int i = 0; i < list.size(); i++) {
-            list.get(i).preenchePeriodos(tempoMaximo);
+        for (Processo list1 : list) {
+            list1.preenchePeriodos(tempoMaximo);
         }
         executa();
 
     }
 
-    public void primeiraOrdem() {
-        Processo aux;
-        for (int i = 0; i < list.size(); i++) {
-            for (int j = i + 1; j < list.size(); j++) // sempre 1 elemento à frente
-            {
-                if ((ordem.get(i).getPeriodo()) > (ordem.get(j).getPeriodo())) {
-                    aux = ordem.get(i);
-                    ordem.set(i, ordem.get(j));
-                    ordem.set(j, aux);
-
-                }
-            }
-        } // fim
-    }
+//    public void primeiraOrdem() {
+//        Processo aux;
+//        for (int i = 0; i < list.size(); i++) {
+//            for (int j = i + 1; j < list.size(); j++) // sempre 1 elemento à frente
+//            {
+//                if ((ordem.get(i).getPeriodo()) > (ordem.get(j).getPeriodo())) {
+//                    aux = ordem.get(i);
+//                    ordem.set(i, ordem.get(j));
+//                    ordem.set(j, aux);
+//
+//                }
+//            }
+//        } // fim
+//    }
 
     private void executa() {
         ArrayList[] a = new ArrayList[list.size()];
