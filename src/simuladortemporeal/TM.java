@@ -39,9 +39,7 @@ public class TM {
         tempoMaximo = 0;
         for (Processo p : list) {
             if (p.getPeriodo() > tempoMaximo) {
-
                 tempoMaximo = p.getPeriodo();
-
             }
         }
         for (Processo list1 : list) {
