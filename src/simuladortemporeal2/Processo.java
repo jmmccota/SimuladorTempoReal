@@ -84,5 +84,4 @@ public class Processo {
     public void setFezPrimeiro(boolean fezPrimeiro) {
         this.fezPrimeiro = fezPrimeiro;
     }
-
 }
