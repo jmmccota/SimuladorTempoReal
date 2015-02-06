@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package simuladortemporeal2;
 
 import java.util.ArrayList;
@@ -10,10 +6,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author Sammy
- */
 public class Escalonador {
 
     int tipo;
@@ -33,7 +25,7 @@ public class Escalonador {
         char pAnterior = ' ';
         double utilizacao = 0;
 
-        ArrayList<Processo> pTodos = new ArrayList<>();
+        ArrayList<Processo> pTodos = new ArrayList<Processo>();
         System.out.print("Tempo\t");
         for (Processo p : processos) {
             utilizacao += ((double) p.getCusto() / (double) p.getPeriodo());
